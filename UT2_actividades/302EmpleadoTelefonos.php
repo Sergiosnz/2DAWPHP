@@ -1,75 +1,72 @@
 <?php
-    declare(strict_types=1);
 
-    class Empleado{
+declare(strict_types=1);
+class Empleado{
 
-        private string $nombre;
-        private string $apellidos;
-        private float $sueldo;
+    private string $nombre;
+    private string $apellidos;
+    private float $sueldo;
+    private $arrTelefonos;
 
-        public function __construct(string $nombre, string $apellidos, float $sueldo){
-
-        }
-
-        public function getNom(): string{
-            return $this->nombre;
-        }
-
-        public function getApellidos(): string{
-            return $this->apellidos;
-        }
-
-        public function getSueldo(): float{
-            return $this->sueldo;
-        }
-
-        public function setNombre(string $nombre): void{
-            $this->nombre=$nombre;
-        }
-
-        public function setApellidos(string $apellidos): void{
-            $this->apellidos=$apellidos;
-        }
-
-        public function setSueldo(float $sueldo): void{
-            $this->sueldo=$sueldo;
-        }
-
-        public function getNombreCompleto(): string{
-            return $this->nombre . " " . $this->apellidos;
-        }
-
-        public function debePagarImpuestos(): bool{
-            return $this->sueldo > 3333 ? true : false;
-        }
-
-
-
-         private $telefonos = array();
-
-    // Método para añadir un teléfono al array
-    public function aniadirTelefono(int $telefono): void {
-        $this->telefonos[] = $telefono;
+    public function __construct(string $nombre, string $apellidos,float $sueldo){
+        $this->nombre = $nombre;
+        $this->apellidos = $apellidos;
+        $this->sueldo = $sueldo;
+        $this->arrTelefonos = array();
     }
 
-    // Método para listar los teléfonos separados por comas
-    public function listarTelefonos(): string {
-        return implode(", ", $this->telefonos);
+    public function getNom(): string{
+        return $this->nombre;
+    }
+    public function getApellidos(): string{
+        return $this->apellidos;
+    }
+    public function getSueldo(): float{
+        return $this->sueldo;
+    }
+    public function setNombre(string $nombre){
+        $this->nombre = $nombre;
+    }
+    public function setApellidos(string $apellidos){
+        $this->apellidos = $apellidos;
     }
 
-    // Método para vaciar el array de teléfonos
-    public function vaciarTelefonos(): void {
-        $this->telefonos = array();
-    }
-        
+    public function setSueldo(float $sueldo){
+        $this->sueldo = $sueldo;
     }
 
-    $empl= new Empleado("Pepe", "Luis",4444);
-    
-$empl->aniadirTelefono(123456789);
-$empl->aniadirTelefono(987654321);
-echo "Lista de teléfonos: " . $empl->listarTelefonos() . "<br>";
+    public function getNombreCompleto(): string{
+        return $this->nombre . " " . $this->apellidos;
+    }
 
-$empl->vaciarTelefonos();
-echo "Teléfonos después de vaciar: " . $empl->listarTelefonos() . "<br>";
+    public function debePagarImpuestos() : bool{
+        return $this->sueldo > 3333;
+    }
+
+    public function anyadirTelefono(int $telefono):void{
+        $this->arrTelefonos[] = $telefono;
+    }
+
+    public function listarTelefonos() : string{
+        return implode(", ", $this->arrTelefonos);
+    }
+
+    public function vaciarTelefonos() : void{
+        $arrTelefonos = [];
+    }
+}
+
+$emp1 = new Empleado("Peppa", "Pig", 4444);
+$emp1->getNombreCompleto();
+$emp1->anyadirTelefono(666555777);
+$emp1->anyadirTelefono(666888999);
+$emp1->anyadirTelefono(666444111);
+echo "Listado de teléfonos: <br>";
+echo $emp1->listarTelefonos();
+$emp1->vaciarTelefonos();
+echo "<br>Listado de teléfonos después de vaciar: <br>";
+$emp1->listarTelefonos();
+
+//echo $emp1->debePagarImpuestos()?"Debe pagar impuesto":"No debe pagar impuestos";
+
 ?>

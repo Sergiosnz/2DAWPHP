@@ -26,6 +26,10 @@ class Empleado{
     public function getSueldoTope(): float{
         return self::$sueldo_tope;
     }
+    
+    public function getTelefonos() : array{
+        return $this->arrTelefonos;
+    }
 
     public function setSueldoTope(float $sueldoTope){
         self::$sueldo_tope = $sueldoTope;
@@ -54,19 +58,27 @@ class Empleado{
     public function vaciarTelefonos() : void{
         $arrTelefonos = [];
     }
+
+
+    public static function toHtml(Empleado $emp): string{
+        $html = '<p>Nombre completo: ' . $emp->getNombreCompleto() . '</p>';
+            $html .= '<p>Sueldo: ' . $emp->getSueldo() . '</p>';
+            
+            $telefonos = $emp->getTelefonos();
+            if (!empty($telefonos)) {
+                $html .= '<p>Teléfonos:</p>';
+                $html .= '<ol>';
+                foreach ($telefonos as $telefono) {
+                    $html .= '<li>' . $telefono . '</li>';
+                }
+                $html .= '</ol>';
+            } else {
+                $html .= '<p>No hay teléfonos registrados.</p>';
+            }
+    
+            return $html;
+    }
 }
 
-$emp1 = new Empleado("Peppa", "Pig", 4444);
-$emp1->getNombreCompleto();
-$emp1->anyadirTelefono(666555777);
-$emp1->anyadirTelefono(666888999);
-$emp1->anyadirTelefono(666444111);
-echo "Listado de teléfonos: <br>";
-echo $emp1->listarTelefonos();
-$emp1->vaciarTelefonos();
-echo "<br>Listado de teléfonos después de vaciar: <br>";
-$emp1->listarTelefonos();
-
-//echo $emp1->debePagarImpuestos()?"Debe pagar impuesto":"No debe pagar impuestos";
 
 ?>

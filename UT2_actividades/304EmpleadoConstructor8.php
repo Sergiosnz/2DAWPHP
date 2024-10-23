@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 class Empleado{
+
     
     private $arrTelefonos;
-    static float $sueldo_tope = 3333;
 
     public function __construct(
         private string $nombre, 
@@ -23,14 +23,7 @@ class Empleado{
     public function getSueldo(): float{
         return $this->sueldo;
     }
-    public function getSueldoTope(): float{
-        return self::$sueldo_tope;
-    }
-
-    public function setSueldoTope(float $sueldoTope){
-        self::$sueldo_tope = $sueldoTope;
-    }
-    
+   
     public function setSueldo(float $sueldo){
         $this->sueldo = $sueldo;
     }
@@ -40,7 +33,7 @@ class Empleado{
     }
 
     public function debePagarImpuestos() : bool{
-        return $this->sueldo > self::$sueldo_tope;
+        return $this->sueldo > 3333;
     }
 
     public function anyadirTelefono(int $telefono):void{
