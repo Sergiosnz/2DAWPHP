@@ -41,6 +41,7 @@
 
      public abstract function toHtml(Persona $p) : string;
 
+    
      public function __toString(): string{
 
         return self::class . ": " . $this->nombre . " " . $this->apellidos . " " . $this->edad;
@@ -57,9 +58,9 @@
     
 
     function __construct(
-        private string $nombre,
-        private string $apellidos,
-        private string $edad,
+        string $nombre,
+        string $apellidos,
+        string $edad,
         private float $sueldo = 1000,){
 
         parent::__construct($nombre,$apellidos,$edad);

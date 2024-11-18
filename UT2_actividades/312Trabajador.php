@@ -41,6 +41,7 @@
 
      public abstract function toHtml(Persona $p) : string;
 
+    
      public function __toString(): string{
 
         return self::class . ": " . $this->nombre . " " . $this->apellidos . " " . $this->edad;
@@ -48,29 +49,26 @@
      }
 
  }
+
  abstract class Trabajador extends Persona{
     private $telefonos = array();
     private float $sueldoTope;
-
     function __construct(
-        private string $nombre,
-        private string $apellidos,
-        private string $edad,
-        private float $sueldo = 1000,){
+        string $nombre,
+        string $apellidos,
+        string $edad,
+        ){
 
         parent::__construct($nombre,$apellidos,$edad);
         $this->sueldoTope = 3333;
-
+       
     } 
-
-    public function setSueldoTope(float $sueldoTope) : void{
-        $this->$sueldoTope = $sueldoTope;
-    }
 
     function getTelefonos() : array{
         return $this->telefonos;
     }
 
+    
     public function anyadirTelefono(int $telefono) : void {
 
         array_push($this->telefonos,$telefono);
@@ -82,55 +80,52 @@
         return implode(' ,',$this->telefonos);
 
     }
-
+   
     public function vaciarTelefono() : void {
 
         $this->telefonos = array();
     }
 
-    public abstract function CalcularSueldo(): float;    
+    public abstract function calcularSueldo() : float;
 
-    public function debePagarImpuestos() : bool {
+    public function debePagarImpuestos() {
 
-        return $this->sueldo > self::$sueldoTope && $this->edad > 21;
+        return $this->calcularSueldo() > $this->sueldoTope && $this->edad > 21;
 
     }
  }
+
  class Empleado extends Trabajador{
 
-    
-    private int $horasTrabajadas;
-    private int $precioPorHora;
-    
+    private float $sueldoTope;
+       
 
     function __construct(
-        private string $nombre,
-        private string $apellidos,
-        private string $edad,
-        private float $sueldo = 1000,){
+        string $nombre,
+        string $apellidos,
+        string $edad,
+        private int $horasTrabajadas,
+        private float $precioPorHora,
+        ){
 
-        parent::__construct($nombre,$apellidos,$edad,$sueldoTope);
-        $this->horasTrabajadas = 8;
-        $this->precioPorHora = 12;
+        parent::__construct($nombre,$apellidos,$edad);
+    
        
     } 
 
-    
-    function getSueldo() : float {
-        return $this->sueldo;
+    public function setSueldoTope(float $sueldoTope) : void{
+        $this->$sueldoTope = $sueldoTope;
     }
+    
 
-    public function CalcularSueldo(int $horasTrabajadas, int $precioPorHora): int{
-        $this->precioPorHora = $precioPorHora;
-        $this->horasTrabajadas = $horasTrabajadas;
-
-        return ($this->horasTrabajadas*$this->precioPorHora);
+    public function calcularSueldo(): float{
+        return $this->horasTrabajadas * $this->precioPorHora;
     }
 
     public function toHTML(Persona $p): string {
         if($p instanceof Empleado){
-            $html = '<p>Nombre completo: ' . $p->getNombreCompleto() . '</p>';
-            $html .= '<p>Sueldo: ' . $p->getSueldo() . '</p>';
+            $html = '<p>Nombre completo: ' . $p->getNombreCompleto(). '</p>';
+            $html .= '<p>Sueldo: ' . $p->calcularSueldo() . '</p>';
             
             $telefonos = $p->getTelefonos();
             if (!empty($telefonos)) {
@@ -148,36 +143,61 @@
     }
 
     public function __toString() : string{
-        return self::class . ":" . $this->nombre . " " . $this->apellidos . " " .$this->sueldo ." ". $this->edad . " Telefonos: " . $this->listarTelefonos();
+        return self::class . ":" . $this->nombre . " " . $this->apellidos . " " .$this->calcularSueldo() ." ". $this->edad . " Telefonos: " . $this->listarTelefonos();
     }
 
 
 }
 
 class Gerente extends Trabajador{
-    private string $salario;
+     
 
     function __construct(
-        private string $nombre,
-        private string $apellidos,
-        private string $edad,
-        private float $sueldo = 1000,){
+        string $nombre,
+        string $apellidos,
+        string $edad,
+        private float $salario,
+        ){
 
         parent::__construct($nombre,$apellidos,$edad);
-        $this->sueldoTope = 3333;
-        $this->salario = 1300;
-        
+    
        
     } 
 
-
-    public function CalcularSueldo(string $salario, string $edad):string{
-        $this->salario = $salario;
-        $this->edad = $edad;
-
-        return ($this->salario+(($this->salario*$this->edad)/100));
+    public function setSueldoTope(float $sueldoTope) : void{
+        $this->$sueldoTope = $sueldoTope;
     }
-}
+    
 
+    public function calcularSueldo(): float{
+        return $this->salario + $this->salario *$this->getEdad()/100;
+    }
+
+    public function toHTML(Persona $p): string {
+        if($p instanceof Empleado){
+            $html = '<p>Nombre completo: ' . $p->getNombreCompleto() . '</p>';
+            $html .= '<p>Sueldo: ' . $p->calcularSueldo() . '</p>';
+            
+            $telefonos = $p->getTelefonos();
+            if (!empty($telefonos)) {
+                $html .= '<p>Teléfonos:</p>';
+                $html .= '<ul>';
+                foreach ($telefonos as $telefono) {
+                    $html .= '<li>' . $telefono . '</li>';
+                }
+                $html .= '</ul>';
+            } else {
+                $html .= '<p>No hay teléfonos registrados.</p>';
+            }
+        }
+        return $html;
+    }
+
+    public function __toString() : string{
+        return self::class . ":" . $this->nombre . " " . $this->apellidos . " " .$this->calcularSueldo() ." ". $this->edad . " Telefonos: " . $this->listarTelefonos();
+    }
+
+
+}
 
 ?>
